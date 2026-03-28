@@ -149,6 +149,15 @@ VITE_FIREBASE_PROJECT_ID=your-project-id
 VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abc123
+
+# Dashboard v1 data source
+# Used by apps/web/src/pages/Dashboard.tsx for /events, /zones, /timeline
+# Falls back to local mock-safe demo data if unavailable
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
+
+# Optional: enables Mapbox GL JS in the dashboard map panel.
+# If omitted, the dashboard renders a lightweight SVG fallback map instead.
+NEXT_PUBLIC_MAPBOX_TOKEN=pk.your-mapbox-token
 ```
 
 ### 3. Set Up External Services
