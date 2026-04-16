@@ -8,6 +8,7 @@ import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const BASE_DIR = '/home/openclaw/.openclaw'
 
@@ -48,7 +49,7 @@ const readClawFile = async (c: Context<{ Variables: { userId: string } }>) => {
         const fullPath = `${BASE_DIR}/${body.path}`
         const content = await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             `cat '${fullPath.replace(/'/g, "'\\''")}' 2>&1`
         )
 

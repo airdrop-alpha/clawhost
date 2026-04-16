@@ -14,6 +14,7 @@ import {
     DOMAIN
 } from '@/controllers/claws/helpers'
 import { ok, fail } from '@/lib/response'
+import { encrypt } from '@/lib/crypto'
 import { t } from '@openclaw/i18n'
 
 const createClaw = async (c: Context<{ Variables: { userId: string } }>) => {
@@ -129,10 +130,10 @@ const createClaw = async (c: Context<{ Variables: { userId: string } }>) => {
             ip,
             planId,
             location,
-            rootPassword: finalPassword,
+            rootPassword: encrypt(finalPassword),
             sshKeyId: sshKeyId || null,
             subdomain,
-            gatewayToken,
+            gatewayToken: encrypt(gatewayToken),
             model: model || null
         })
 

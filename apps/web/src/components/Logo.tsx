@@ -6,13 +6,20 @@ const Logo: FC = (): ReactNode => {
     return (
         <Link
             to='/'
-            className='flex items-center gap-2 transition hover:opacity-80'
+            className='flex items-center gap-3 transition hover:opacity-80'
         >
+            <span className='font-clash text-xl font-bold'>
+                <span className='bg-gradient-to-r from-[#ef5350] to-[#ff7043] bg-clip-text text-transparent'>Alpha</span>
+                <span className='text-white'>Claw</span>
+                <span className='ml-1 text-[#ef5350]'>⚡</span>
+            </span>
+            {/* Original SVG kept as hidden for reference */}
             <svg
-                height='32'
+                height='0'
                 viewBox='0 0 271 64'
                 fill='none'
                 xmlns='http://www.w3.org/2000/svg'
+                className='hidden'
             >
                 <g clip-path='url(#clip0_4135_67)'>
                     <path

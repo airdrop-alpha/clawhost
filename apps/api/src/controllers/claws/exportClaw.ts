@@ -9,6 +9,7 @@ import { isAdmin } from '@/controllers/claws/helpers'
 import { checkRateLimit, setRateLimit } from '@/controllers/auth/rateLimit'
 import { t } from '@openclaw/i18n'
 import { fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const EXPORT_RATE_LIMIT_WINDOW = 3_600_000
 
@@ -47,7 +48,7 @@ const exportClaw = async (c: Context<{ Variables: { userId: string } }>) => {
 
         const buffer = await sshBuffer(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             'tar czf - -C /home/openclaw .openclaw'
         )
 

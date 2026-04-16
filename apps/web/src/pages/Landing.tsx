@@ -321,7 +321,7 @@ const Landing: FC = (): ReactNode => {
                         >
                             <div>
                                 <div className='font-clash text-3xl font-bold text-white md:text-4xl'>
-                                    $10/mo
+                                    $19/mo
                                 </div>
                                 <div className='text-sm text-gray-500'>
                                     {t('landing.startingPrice')}
@@ -370,7 +370,7 @@ const Landing: FC = (): ReactNode => {
                                 <div className='h-3 w-3 rounded-full bg-[#28c840]' />
                                 <div className='ml-4 flex items-center gap-2 rounded-md bg-white/5 px-3 py-1 text-xs text-gray-400'>
                                     <Lock className='h-3 w-3' />
-                                    clawhost.cloud/claws
+                                    alphaclaw.dev/claws
                                 </div>
                                 <div className='flex-1' />
                             </div>
@@ -537,7 +537,7 @@ const Landing: FC = (): ReactNode => {
                             {t('landing.features')}
                         </Badge>
                         <h2 className='font-clash mb-4 bg-gradient-to-b from-white to-gray-400 bg-clip-text text-4xl font-bold text-transparent md:text-5xl'>
-                            {t('landing.whyClawHost')}
+                            {t('landing.whyAlphaClaw')}
                         </h2>
                         <p className='mx-auto max-w-xl text-lg text-[#8892b0]'>
                             {t('landing.featuresDescription')}
@@ -959,11 +959,11 @@ const Landing: FC = (): ReactNode => {
                                 <tr className='border-b border-white/10 bg-white/[0.02]'>
                                     <th className='px-6 py-4'>
                                         <div className='flex items-center justify-center'>
-                                            <img
-                                                src='https://cdn.clawhost.cloud/assets/clawhost-logo-light.png'
-                                                alt='ClawHost'
-                                                className='h-6'
-                                            />
+                                            <span className='font-clash text-lg font-bold'>
+                                                <span className='bg-gradient-to-r from-[#ef5350] to-[#ff7043] bg-clip-text text-transparent'>Alpha</span>
+                                                <span className='text-white'>Claw</span>
+                                                <span className='ml-1 text-[#ef5350]'>⚡</span>
+                                            </span>
                                         </div>
                                     </th>
                                     <th className='px-6 py-4 text-center'>

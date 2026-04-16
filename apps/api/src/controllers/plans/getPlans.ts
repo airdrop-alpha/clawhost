@@ -134,7 +134,8 @@ const planConfigs: Record<
         order: digitaloceanPlanOrder,
         prices: digitaloceanCustomPrices
     },
-    vultr: { order: vultrPlanOrder, prices: vultrCustomPrices }
+    vultr: { order: vultrPlanOrder, prices: vultrCustomPrices },
+    bitlaunch: { order: [], prices: {} }
 }
 
 const getPlans = async (c: Context) => {

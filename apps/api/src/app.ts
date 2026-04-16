@@ -14,23 +14,26 @@ import {
     usersRoutes,
     webhooksRoutes
 } from '@/routes'
+import { globalRateLimit } from '@/middleware/rateLimiter'
 
 const app = new Hono<{ Variables: { userId: string } }>()
 
 app.use('*', logger())
+const corsOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://clawhost.cloud', 'https://www.clawhost.cloud']
+    : ['https://clawhost.cloud', 'https://www.clawhost.cloud', 'http://localhost:1111', 'http://localhost:3000']
+
 app.use(
     '*',
     cors({
-        origin: [
-            'https://clawhost.cloud',
-            'https://www.clawhost.cloud',
-            'http://localhost:1111'
-        ],
+        origin: corsOrigins,
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowHeaders: ['Content-Type', 'Authorization'],
         maxAge: 86400
     })
 )
+
+app.use('*', globalRateLimit)
 
 app.get('/', (c) => ok(c, null, t('api.healthOk')))
 

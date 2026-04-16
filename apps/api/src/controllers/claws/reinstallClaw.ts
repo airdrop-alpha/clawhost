@@ -5,6 +5,7 @@ import { db } from '@/db'
 import { claws } from '@/db/schema'
 import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
+import { decrypt } from '@/lib/crypto'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
 
@@ -32,12 +33,15 @@ const reinstallClaw = async (c: Context<{ Variables: { userId: string } }>) => {
             return fail(c, t('api.failedToReinstallClaw'), 400)
         }
 
+        const decryptedPassword = decrypt(claw[0].rootPassword)
+        const decryptedGatewayToken = claw[0].gatewayToken ? decrypt(claw[0].gatewayToken) : ''
+
         const config: Record<string, unknown> = {
             gateway: {
                 mode: 'local',
                 auth: {
                     mode: 'token',
-                    token: claw[0].gatewayToken
+                    token: decryptedGatewayToken
                 },
                 controlUi: {
                     allowInsecureAuth: true
@@ -142,7 +146,7 @@ server {
 
         const output = await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decryptedPassword,
             reinstallCommands,
             120000
         )

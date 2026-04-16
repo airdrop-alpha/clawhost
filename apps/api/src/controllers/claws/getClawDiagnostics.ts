@@ -7,6 +7,7 @@ import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const SEPARATOR = '---CLAWHOST_SEP---'
 
@@ -46,7 +47,7 @@ const getClawDiagnostics = async (
 
         const output = await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             command
         )
         const parts = output.split(SEPARATOR)

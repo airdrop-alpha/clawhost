@@ -140,7 +140,7 @@ const initiateClawPurchase = async (
             priceMonthly
         } = await c.req.json<InitiateClawPurchaseBody>()
 
-        if (!planId || !location || !priceMonthly) {
+        if (!planId || !location || priceMonthly === undefined) {
             return fail(c, t('api.missingRequiredFields'), 400)
         }
 
@@ -156,9 +156,8 @@ const initiateClawPurchase = async (
             return fail(c, t('api.invalidProvider'), 400)
         }
 
-        const provider = getProvider(
-            (providerName || 'hetzner') as ProviderType
-        )
+        const normalizedProvider = (providerName || 'hetzner') as ProviderType
+        const provider = getProvider(normalizedProvider)
         const [serverTypes, locations] = await Promise.all([
             provider.getServerTypes(),
             provider.getLocations()
@@ -173,6 +172,11 @@ const initiateClawPurchase = async (
 
         if (selectedPlan.memory < MIN_MEMORY_GB) {
             return fail(c, t('api.planBelowMinimumMemory'), 400)
+        }
+
+        const normalizedPriceMonthly = Number(selectedPlan.priceMonthly.toFixed(2))
+        if (Math.abs(priceMonthly - normalizedPriceMonthly) > 0.01) {
+            return fail(c, t('api.invalidPlan'), 400)
         }
 
         const selectedLocation = locations.find((l) => l.id === location)
@@ -239,13 +243,14 @@ const initiateClawPurchase = async (
                 .where(eq(users.id, userId))
         }
 
-        const productId = getPolarProductId(providerName || 'hetzner', planId)
+        const productId = getPolarProductId(normalizedProvider, planId)
         if (!productId) {
             return fail(c, t('api.paymentNotConfigured'), 400)
         }
 
         const pendingId = crypto.randomUUID()
         const finalPassword = password || generatePassword()
+        const priceMonthlyCents = Math.round(normalizedPriceMonthly * 100)
 
         const checkout = await checkouts.create({
             productId,
@@ -254,9 +259,14 @@ const initiateClawPurchase = async (
             metadata: {
                 pendingClawId: pendingId,
                 userId,
+                provider: normalizedProvider,
                 planId,
                 location,
-                name
+                name,
+                sshKeyId: sshKeyId || '',
+                volumeSize: volumeSize?.toString() || '',
+                model: model || '',
+                priceMonthly: priceMonthlyCents.toString()
             }
         })
 
@@ -267,7 +277,7 @@ const initiateClawPurchase = async (
             userId,
             checkoutId: checkout.id,
             name,
-            provider: providerName || 'hetzner',
+            provider: normalizedProvider,
             planId,
             location,
             rootPassword: finalPassword,
@@ -275,11 +285,21 @@ const initiateClawPurchase = async (
             volumeSize: volumeSize || null,
             model: model || null,
             apiToken: apiToken || null,
-            priceMonthly: Math.round(priceMonthly * 100),
+            priceMonthly: priceMonthlyCents,
             expiresAt
         })
 
-        return ok(c, { checkoutUrl: checkout.url, checkoutId: checkout.id, pendingClawId: pendingId, expiresAt: expiresAt.toISOString() }, t('api.clawPurchaseInitiated'))
+        return ok(
+            c,
+            {
+                checkoutUrl: checkout.url,
+                checkoutId: checkout.id,
+                pendingClawId: pendingId,
+                expiresAt: expiresAt.toISOString(),
+                priceMonthly: normalizedPriceMonthly
+            },
+            t('api.clawPurchaseInitiated')
+        )
     } catch (err) {
         console.error('Initiate claw purchase error:', err)
         return fail(

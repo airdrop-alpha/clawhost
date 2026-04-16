@@ -29,7 +29,7 @@ export const en = {
         deployOpenClaw: 'Deploy OpenClaw'
     },
     footer: {
-        copyright: 'ClawHost. All rights reserved.',
+        copyright: 'AlphaClaw. All rights reserved.',
         termsOfService: 'Terms of Service',
         privacyPolicy: 'Privacy Policy',
         getInTouch: 'Get in Touch',
@@ -198,7 +198,7 @@ export const en = {
     auth: {
         signIn: 'Sign In',
         signInDescription:
-            'Sign in to your ClawHost account to manage your OpenClaw instances.',
+            'Sign in to your AlphaClaw account to manage your OpenClaw instances.',
         signingIn: 'Signing In',
         signingYouIn: 'Signing you in',
         loggingInAs: 'Logging in as',
@@ -210,7 +210,7 @@ export const en = {
         signInToDeployOpenClaw:
             'Sign-in to manage and deploy OpenClaw instances.',
         emailAddress: 'Email Address',
-        emailPlaceholder: 'example@clawhost.cloud',
+        emailPlaceholder: 'example@alphaclaw.dev',
         continueWithEmail: 'Continue with Email',
         sending: 'Sending...',
         magicLinkDescription:
@@ -222,7 +222,7 @@ export const en = {
     account: {
         title: 'Account',
         description:
-            'Manage your ClawHost account settings, profile information, and billing history.',
+            'Manage your AlphaClaw account settings, profile information, and billing history.',
         accountSettings: 'Account',
         manageYourAccount: 'Manage your account and view all your billings.',
         profileInformation: 'Profile Information',
@@ -536,7 +536,7 @@ export const en = {
         step3Description:
             'Full access to OpenClaw and the VPS, with no limits on what you can achieve.',
         features: 'Features',
-        whyClawHost: 'All-in-One Features',
+        whyAlphaClaw: 'All-in-One Features',
         featuresDescription: 'Why we’re worth a try, features don’t lie here.',
         zeroConfigDescription:
             'Skip hours of server and OpenClaw setup. It’s pre-installed and ready within minutes.',
@@ -611,16 +611,16 @@ export const en = {
         faqTitle: 'Questions',
         frequentlyAskedQuestions: 'Common Questions',
         faqDescription: 'Every single frequently asked question, answered.',
-        faq1Question: 'What is ClawHost?',
+        faq1Question: 'What is AlphaClaw?',
         faq1Answer:
-            'ClawHost is a platform built to make OpenClaw accessible to everyone. It lets both non-technical users and developers run OpenClaw without managing infrastructure. We handle servers, uptime, security, and maintenance — you just use OpenClaw.',
+            'AlphaClaw is a platform built to make OpenClaw accessible to everyone. It lets both non-technical users and developers run OpenClaw without managing infrastructure. We handle servers, uptime, security, and maintenance — you just use OpenClaw.',
         faq2Question: 'What is OpenClaw?',
         faq2Answer:
             'OpenClaw is a self-hosted secure access layer for your AI tools and services. It’s pre-configured for security and performance, so you can deploy it and connect instantly.',
         faq3Question:
             'How is this different from other AI tools or hosted platforms?',
         faq3Answer:
-            'Unlike hosted AI tools, ClawHost gives you a real server with OpenClaw installed. You own the infrastructure, control everything, and aren’t limited by a shared platform or model.',
+            'Unlike hosted AI tools, AlphaClaw gives you a real server with OpenClaw installed. You own the infrastructure, control everything, and aren’t limited by a shared platform or model.',
         faq4Question: 'Do I need technical knowledge?',
         faq4Answer:
             'No. We handle all infrastructure, setup, and maintenance. You can configure and manage OpenClaw through its UI, connect to channels, and customize usage — without touching servers or infrastructure.',
@@ -683,12 +683,12 @@ export const en = {
     changelog: {
         title: 'Changelog',
         description:
-            'Track updates, new features, and improvements to ClawHost.',
-        subtitle: 'All updates, new features, and improvements to ClawHost.',
+            'Track updates, new features, and improvements to AlphaClaw.',
+        subtitle: 'All updates, new features, and improvements to AlphaClaw.',
         upcomingRelease: 'Upcoming',
         release1Title: 'Initial Release',
         release1Description:
-            'The first official release of ClawHost — deploy OpenClaw on your own VPS with one click.',
+            'The first official release of AlphaClaw — deploy OpenClaw on your own VPS with one click.',
         release1Feature1: 'One-click OpenClaw deployment on Hetzner Cloud',
         release1Feature2:
             'Dashboard to manage claws — start, stop, restart, and delete instances',
@@ -707,7 +707,7 @@ export const en = {
             'Auto-provisioning with OpenClaw pre-installed and configured',
         release2Title: 'DigitalOcean & More',
         release2Description:
-            'Multi-provider infrastructure and a new way to stay updated on everything ClawHost.',
+            'Multi-provider infrastructure and a new way to stay updated on everything AlphaClaw.',
         release2Feature1: 'DigitalOcean as a second cloud provider',
         release2Feature2:
             '7 DigitalOcean server plans with dedicated vCPU, RAM, and storage options',
@@ -749,7 +749,7 @@ export const en = {
         signIn: 'Sign In',
         signInDescription: 'Sign in to manage your OpenClaw instances.',
         enterEmail: 'Email Address',
-        emailPlaceholder: 'example@clawhost.cloud',
+        emailPlaceholder: 'example@alphaclaw.dev',
         continueWithEmail: 'Continue with Email',
         otpDescription: "We'll send you a code to sign in. No password needed.",
         sending: 'Sending...',

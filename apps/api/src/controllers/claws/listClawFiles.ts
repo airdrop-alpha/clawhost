@@ -7,6 +7,7 @@ import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const BASE_DIR = '/home/openclaw/.openclaw'
 
@@ -36,7 +37,7 @@ const listClawFiles = async (c: Context<{ Variables: { userId: string } }>) => {
 
         const output = await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             `find ${BASE_DIR} -type f 2>/dev/null | sort`
         )
 

@@ -8,6 +8,7 @@ import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const BASE_DIR = '/home/openclaw/.openclaw'
 
@@ -67,7 +68,7 @@ const updateClawFile = async (
 
         await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             `echo '${escapedContent}' > '${fullPath.replace(/'/g, "'\\''")}'`
         )
 

@@ -4,11 +4,13 @@ import type { ProviderType } from '@/ts/Types'
 import { hetzner } from '@/services/hetzner'
 import { digitalocean } from '@/services/digitalocean'
 import { vultr } from '@/services/vultr'
+import { bitlaunch } from '@/services/bitlaunch'
 
 const providers: Record<ProviderType, CloudProvider> = {
     hetzner,
     digitalocean,
-    vultr
+    vultr,
+    bitlaunch
 }
 
 const getProvider = (provider: ProviderType): CloudProvider => {

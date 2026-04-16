@@ -32,7 +32,7 @@ const Footer: FC = (): ReactNode => {
                             {t('footer.changelog')}
                         </Link>
                         <a
-                            href='mailto:support@clawhost.cloud'
+                            href='mailto:support@alphaclaw.dev'
                             className='text-muted-foreground hover:text-foreground text-sm transition-colors'
                         >
                             {t('footer.getInTouch')}

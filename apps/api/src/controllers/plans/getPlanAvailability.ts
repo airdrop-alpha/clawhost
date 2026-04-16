@@ -65,7 +65,8 @@ const vultrCustomPrices: Record<string, number> = {
 const pricesByProvider: Record<ProviderType, Record<string, number>> = {
     hetzner: hetznerCustomPrices,
     digitalocean: digitaloceanCustomPrices,
-    vultr: vultrCustomPrices
+    vultr: vultrCustomPrices,
+    bitlaunch: {} // BitLaunch uses dynamic pricing from API
 }
 
 const getPlanAvailability = async (c: Context) => {

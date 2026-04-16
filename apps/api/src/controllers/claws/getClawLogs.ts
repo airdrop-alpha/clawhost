@@ -7,6 +7,7 @@ import executeSSH from '@/services/ssh'
 import { isAdmin } from '@/controllers/claws/helpers'
 import { t } from '@openclaw/i18n'
 import { ok, fail } from '@/lib/response'
+import { decrypt } from '@/lib/crypto'
 
 const getClawLogs = async (c: Context<{ Variables: { userId: string } }>) => {
     try {
@@ -34,7 +35,7 @@ const getClawLogs = async (c: Context<{ Variables: { userId: string } }>) => {
 
         const output = await executeSSH(
             claw[0].ip,
-            claw[0].rootPassword,
+            decrypt(claw[0].rootPassword),
             'tail -100 /var/log/openclaw-gateway.log 2>&1'
         )
 

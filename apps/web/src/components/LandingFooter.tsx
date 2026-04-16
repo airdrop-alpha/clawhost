@@ -27,7 +27,7 @@ const LandingFooter: FC = (): ReactNode => {
                                 <GithubLogo className='h-5 w-5' weight='fill' />
                             </a>
                             <a
-                                href='https://x.com/clawhost'
+                                href='https://x.com/AlphaAgentAI'
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 className='rounded-lg bg-white/5 p-2 text-gray-400 transition hover:bg-white/10 hover:text-white'
@@ -136,7 +136,7 @@ const LandingFooter: FC = (): ReactNode => {
                             </li>
                             <li>
                                 <a
-                                    href='mailto:support@clawhost.cloud'
+                                    href='mailto:support@alphaclaw.dev'
                                     className='text-gray-400 transition hover:text-white'
                                 >
                                     {t('footer.getInTouch')}

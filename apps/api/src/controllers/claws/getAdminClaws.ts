@@ -138,8 +138,9 @@ const getAdminClaws = async (c: Context<{ Variables: { userId: string } }>) => {
         const billing = claw.polarSubscriptionId
             ? subMap.get(claw.polarSubscriptionId)
             : undefined
+        const { rootPassword, gatewayToken, ...safeClaw } = claw
         return {
-            ...claw,
+            ...safeClaw,
             ownerEmail: userMap.get(claw.userId) || null,
             volumes: allVolumes.filter((v) => v.clawId === claw.id),
             currentPeriodStart: billing?.start || null,

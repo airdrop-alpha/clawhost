@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, integer } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, integer, bigint } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
     id: text('id').primaryKey(),
@@ -26,9 +26,11 @@ export const claws = pgTable('claws', {
     subdomain: text('subdomain'),
     gatewayToken: text('gateway_token'),
     model: text('model'),
+    tier: text('tier').notNull().default('basic'),
     polarSubscriptionId: text('polar_subscription_id'),
     polarProductId: text('polar_product_id'),
     polarCustomerId: text('polar_customer_id'),
+    paidUntil: timestamp('paid_until'),
     subscriptionStatus: text('subscription_status').default('pending'),
     deletionScheduledAt: timestamp('deletion_scheduled_at'),
     createdAt: timestamp('created_at').defaultNow().notNull()
@@ -48,6 +50,7 @@ export const pendingClaws = pgTable('pending_claws', {
     sshKeyId: text('ssh_key_id').references(() => sshKeys.id),
     volumeSize: integer('volume_size'),
     model: text('model'),
+    tier: text('tier').notNull().default('basic'),
     apiToken: text('api_token'),
     priceMonthly: integer('price_monthly').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -91,6 +94,24 @@ export const clawExports = pgTable('claw_exports', {
         .notNull()
         .references(() => claws.id),
     fileSize: integer('file_size'),
+    createdAt: timestamp('created_at').defaultNow().notNull()
+})
+
+export const payments = pgTable('payments', {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+        .notNull()
+        .references(() => users.id),
+    clawId: text('claw_id').references(() => claws.id),
+    amountUsdc: integer('amount_usdc'),
+    expectedAmount: integer('expected_amount').notNull(),
+    billingMonths: integer('billing_months').notNull().default(1),
+    reference: text('reference').notNull(),
+    status: text('status').notNull().default('pending'),
+    txHash: text('tx_hash').unique(),
+    fromAddress: text('from_address'),
+    confirmedAt: timestamp('confirmed_at'),
+    expiresAt: timestamp('expires_at').notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull()
 })
 

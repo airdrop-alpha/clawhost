@@ -10,4 +10,4 @@ type NestedKeyOf<T> = T extends object
 
 export type TranslationKey = NestedKeyOf<Translations>
 
-export type Languages = 'en'
+export type Languages = 'en' | 'zh'

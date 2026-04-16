@@ -43,8 +43,9 @@ const getClaw = async (c: Context<{ Variables: { userId: string } }>) => {
                     .update(claws)
                     .set({ status: serverStatus.status, ip: serverStatus.ip })
                     .where(eq(claws.id, id))
+                const { rootPassword: _rp, gatewayToken: _gt, ...safeSynced } = claw[0]
                 return ok(c, {
-                    ...claw[0],
+                    ...safeSynced,
                     status: serverStatus.status,
                     ip: serverStatus.ip
                 }, t('api.clawFetched'))
@@ -54,7 +55,8 @@ const getClaw = async (c: Context<{ Variables: { userId: string } }>) => {
         }
     }
 
-    return ok(c, claw[0], t('api.clawFetched'))
+    const { rootPassword, gatewayToken, ...safeClaw } = claw[0]
+    return ok(c, safeClaw, t('api.clawFetched'))
 }
 
 export default getClaw

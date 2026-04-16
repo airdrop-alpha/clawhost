@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="apps/web/public/favicon.ico" alt="ClawHost" width="80" />
+  <img src="apps/web/public/favicon.ico" alt="AlphaClaw" width="80" />
 </p>
 
-<h1 align="center">ClawHost</h1>
+<h1 align="center">AlphaClaw</h1>
 
 <p align="center">
   Deploy OpenClaw on your own VPS with one click.<br/>
@@ -10,8 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="https://clawhost.cloud">Website</a> &middot;
-  <a href="https://clawhost.cloud/posts">Blog</a> &middot;
+  <a href="https://alphaclaw.dev">Website</a> &middot;
+  <a href="https://alphaclaw.dev/posts">Blog</a> &middot;
   <a href="#self-hosting">Self-Host Guide</a>
 </p>
 
@@ -24,9 +24,9 @@
 
 ---
 
-## What is ClawHost?
+## What is AlphaClaw?
 
-ClawHost is an open-source, self-hostable cloud hosting platform that lets anyone deploy [OpenClaw](https://openclaw.dev) on a dedicated VPS in under a minute. It handles server provisioning, DNS, SSL, firewall configuration, and OpenClaw installation automatically — so you can focus on using AI, not managing infrastructure.
+AlphaClaw is an open-source, self-hostable cloud hosting platform that lets anyone deploy [OpenClaw](https://openclaw.dev) on a dedicated VPS in under a minute. It handles server provisioning, DNS, SSL, firewall configuration, and OpenClaw installation automatically — so you can focus on using AI, not managing infrastructure.
 
 ### Key Highlights
 
@@ -43,7 +43,7 @@ ClawHost is an open-source, self-hostable cloud hosting platform that lets anyon
 
 ## Architecture
 
-ClawHost is a TypeScript monorepo built with [Turborepo](https://turbo.build) and managed with [pnpm](https://pnpm.io).
+AlphaClaw is a TypeScript monorepo built with [Turborepo](https://turbo.build) and managed with [pnpm](https://pnpm.io).
 
 ```
 clawhost/
@@ -250,6 +250,7 @@ The web dev server proxies `/api` requests to the API server automatically.
 | `pnpm --filter api db:generate` | Generate a new migration after schema changes |
 | `pnpm --filter api db:migrate`  | Apply pending migrations                      |
 | `pnpm --filter api db:studio`   | Open Drizzle Studio (database GUI)            |
+| `pnpm --filter api test`        | Run API smoke/unit tests                      |
 
 ### Email Development
 
@@ -310,6 +311,14 @@ pnpm --filter api email:dev    # Preview email templates at localhost:3333
 | ------ | --------------------- | --------------------- |
 | `POST` | `/api/webhooks/polar` | Polar payment webhook |
 
+For a local replayable verification path, see [`docs/polar-e2e-checklist.md`](docs/polar-e2e-checklist.md).
+
+For a real-credential staging validation runbook (Polar → webhook → provision → gateway reachable), see [`docs/staging-real-credential-runbook.md`](docs/staging-real-credential-runbook.md).
+
+For staging secret ownership / collection planning, see [`docs/staging-secret-matrix.md`](docs/staging-secret-matrix.md).
+
+For copyable staging env templates, see [`apps/api/.env.staging.example`](apps/api/.env.staging.example) and [`apps/web/.env.staging.example`](apps/web/.env.staging.example).
+
 ## Deployment
 
 ### Web App
@@ -339,13 +348,16 @@ pnpm start    # Starts on port 2222
 
 When a user deploys a new claw, the platform:
 
-1. **Creates a checkout** — Initiates a Polar.sh subscription for the selected plan
-2. **Provisions a server** — Spins up a Hetzner Cloud VPS in the chosen region
-3. **Runs cloud-init** — Automatically installs Node.js, OpenClaw, Nginx, SSL, and firewall
-4. **Configures DNS** — Creates a Cloudflare subdomain pointing to the server IP
-5. **Delivers access** — User gets a subdomain URL, root password, and SSH access
+1. **Creates a checkout** — Initiates a Polar.sh subscription for the selected plan and stores a `pending_claw`
+2. **Consumes Polar webhooks** — `checkout.updated` and `subscription.active` can both trigger the provisioning path
+3. **Provisions a server** — Spins up a VPS in the chosen region using the selected provider
+4. **Runs cloud-init** — Automatically installs Node.js, OpenClaw, Nginx, SSL, and firewall
+5. **Configures DNS** — Creates a Cloudflare subdomain pointing to the server IP
+6. **Delivers access** — User gets a subdomain URL, root password, and gateway token
 
-The `scripts/cloud-init.yaml` template configures every new instance with:
+A step-by-step local verification checklist (including mock webhook replay) lives in [`docs/polar-e2e-checklist.md`](docs/polar-e2e-checklist.md).
+
+The generated cloud-init script (`apps/api/src/controllers/claws/helpers/generateCloudInit.ts`) configures every new instance with:
 
 - Node.js 22 runtime
 - OpenClaw (installed globally via npm)

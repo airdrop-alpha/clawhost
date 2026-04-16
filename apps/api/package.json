@@ -1,12 +1,13 @@
 {
     "name": "api",
-    "version": "0.0.33",
+    "version": "0.0.34",
     "private": true,
     "type": "module",
     "scripts": {
         "dev": "next dev -p 2222",
         "build": "next build",
         "start": "next start -p 2222",
+        "test": "node --import tsx --test src/**/*.test.ts",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",

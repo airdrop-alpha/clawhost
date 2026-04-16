@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { strictRateLimit } from '@/middleware/rateLimiter'
 import {
     getClaws,
     getAdminClaws,
@@ -27,8 +28,8 @@ const app = new Hono<{ Variables: { userId: string } }>()
 app.get('/', getClaws)
 app.get('/admin', getAdminClaws)
 app.get('/:id', getClaw)
-app.post('/', createClaw) // Direct creation (for free tier or testing)
-app.post('/purchase', initiateClawPurchase) // Paid creation with Polar checkout
+app.post('/', strictRateLimit, createClaw) // Direct creation (for free tier or testing)
+app.post('/purchase', strictRateLimit, initiateClawPurchase) // Paid creation with Polar checkout
 app.post('/:id/sync', syncClaw)
 app.post('/:id/start', startClaw)
 app.post('/:id/stop', stopClaw)

@@ -1,8 +1,70 @@
+export type ClawTier = 'basic' | 'pro' | 'enterprise'
+
 function getProviderEnvVar(model: string): string | null {
     if (model.startsWith('anthropic/')) return 'ANTHROPIC_API_KEY'
     if (model.startsWith('openai/')) return 'OPENAI_API_KEY'
     if (model.startsWith('google/')) return 'GEMINI_API_KEY'
     return null
+}
+
+/**
+ * Default SOUL.md template (Chinese-friendly) for new OpenClaw instances.
+ */
+function getDefaultSoulMd(tier: ClawTier): string {
+    const base = `# SOUL.md — 你的 AI 助手
+
+你是一個智能 AI 助手，運行在 OpenClaw 平台上。
+
+## 核心特質
+- 🌐 雙語溝通：中文和英文都能流暢使用
+- 🤝 友善且專業
+- 🔒 注重安全和隱私
+
+## 行為準則
+- 回答要簡潔有力，避免廢話
+- 不確定的事情要誠實說明
+- 涉及資金操作時要特別謹慎，確認後再執行
+`
+
+    if (tier === 'pro' || tier === 'enterprise') {
+        return (
+            base +
+            `
+## 💰 Crypto 能力
+你已預裝 Coinbase Agentic Wallet Skills，可以：
+- 認證和管理錢包 (authenticate-wallet)
+- 充值 (fund)
+- 發送 USDC (send-usdc)
+- 交易 (trade)
+- 搜索 x402 付費服務 (search-for-service)
+- 使用 x402 付費服務 (pay-for-service)
+
+執行任何資金相關操作前，務必向用戶確認。
+`
+        )
+    }
+
+    return base
+}
+
+/**
+ * Default AGENTS.md template for new instances.
+ */
+function getDefaultAgentsMd(): string {
+    return `# AGENTS.md
+
+## 每次啟動
+1. 讀取 SOUL.md — 了解你是誰
+2. 讀取最近的對話記錄
+
+## 安全
+- 不要洩露私密資料
+- 破壞性操作前要確認
+- 有疑問就問
+
+## 工具
+使用你可用的 skills 來完成任務。Crypto 相關操作請特別小心。
+`
 }
 
 export default function generateCloudInit(
@@ -11,7 +73,9 @@ export default function generateCloudInit(
     domain: string,
     gatewayToken: string,
     model?: string,
-    apiToken?: string
+    apiToken?: string,
+    tier: ClawTier = 'basic',
+    customSkills?: string[]
 ): string {
     const fullDomain = `${subdomain}.${domain}`
 
@@ -216,6 +280,56 @@ runcmd:
     chmod +x /tmp/install-brew.sh
     nohup /tmp/install-brew.sh > /var/log/brew-install.log 2>&1 &
 
+${generateSkillsInstallBlock(tier, customSkills)}
+${generateTemplateBlock(tier)}
 final_message: "OpenClaw instance ready! Access dashboard at https://${fullDomain}/"
+`
+}
+
+/**
+ * Generate cloud-init runcmd block for installing skills based on tier.
+ */
+function generateSkillsInstallBlock(tier: ClawTier, customSkills?: string[]): string {
+    const blocks: string[] = []
+
+    if (tier === 'pro' || tier === 'enterprise') {
+        blocks.push(`  # Install Coinbase Agentic Wallet Skills (crypto suite)
+  - |
+    su - openclaw -c 'cd /home/openclaw/.openclaw && npx skills add coinbase/agentic-wallet-skills -y' >> /var/log/openclaw-skills.log 2>&1`)
+    }
+
+    if (tier === 'enterprise' && customSkills && customSkills.length > 0) {
+        const SKILL_PATTERN = /^[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+$/
+        for (const skill of customSkills) {
+            // Validate skill name format: owner/skill-name only
+            const sanitized = SKILL_PATTERN.test(skill) ? skill : ''
+            if (sanitized) {
+                blocks.push(`  - |
+    su - openclaw -c 'cd /home/openclaw/.openclaw && npx skills add ${sanitized} -y' >> /var/log/openclaw-skills.log 2>&1`)
+            }
+        }
+    }
+
+    return blocks.length > 0 ? blocks.join('\n\n') + '\n' : ''
+}
+
+/**
+ * Generate cloud-init runcmd block for writing default SOUL.md and AGENTS.md templates.
+ */
+function generateTemplateBlock(tier: ClawTier): string {
+    const soulMd = getDefaultSoulMd(tier).replace(/'/g, "'\\''")
+    const agentsMd = getDefaultAgentsMd().replace(/'/g, "'\\''")
+
+    return `  # Write default SOUL.md and AGENTS.md templates
+  - |
+    cat > /home/openclaw/.openclaw/agents/main/agent/SOUL.md << 'SOULEOF'
+${soulMd}
+    SOULEOF
+  - |
+    cat > /home/openclaw/.openclaw/agents/main/agent/AGENTS.md << 'AGENTSEOF'
+${agentsMd}
+    AGENTSEOF
+  - chown -R openclaw:openclaw /home/openclaw/.openclaw/agents
+
 `
 }
